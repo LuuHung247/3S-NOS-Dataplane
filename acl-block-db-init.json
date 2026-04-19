@@ -1,0 +1,14 @@
+{
+    "ACL_RULE": {
+        "BLOCK_DB_INIT|RULE_10": {
+            "PRIORITY": "10",
+            "SRC_IP": "10.1.200.0/24",
+            "DST_IP": "10.1.100.0/24",
+            "PACKET_ACTION": "DROP"
+        },
+        "BLOCK_DB_INIT|DEFAULT_RULE": {
+            "PRIORITY": "1",
+            "PACKET_ACTION": "FORWARD"
+        }
+    }
+}

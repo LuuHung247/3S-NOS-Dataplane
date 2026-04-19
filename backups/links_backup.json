@@ -1,0 +1,232 @@
+[
+    {
+        "capture_compute_id": null,
+        "capture_file_name": null,
+        "capture_file_path": null,
+        "capturing": false,
+        "filters": {},
+        "link_id": "4688e13c-7ffa-47b2-830b-d9e57182345f",
+        "link_style": {},
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 0,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-size: 10; font-style: Verdana",
+                    "text": "e0",
+                    "x": 42,
+                    "y": -32
+                },
+                "node_id": "7364a9ca-a155-4328-832d-fa3b818dd2e9",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 0,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-size: 10; font-style: Verdana",
+                    "text": "nat0",
+                    "x": 52,
+                    "y": 79
+                },
+                "node_id": "6c21053f-fe87-4047-8b08-eb328194e505",
+                "port_number": 0
+            }
+        ],
+        "project_id": "b6bf1cd6-8d58-41d4-941c-893020abd2a3",
+        "suspend": false
+    },
+    {
+        "capture_compute_id": null,
+        "capture_file_name": "spine-leaf1.pcapng",
+        "capture_file_path": "/opt/gns3/projects/b6bf1cd6-8d58-41d4-941c-893020abd2a3/project-files/captures/spine-leaf1.pcapng",
+        "capturing": false,
+        "filters": {},
+        "link_id": "251176e5-1197-427f-b404-32fe0a429188",
+        "link_style": {},
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 1,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "1/0"
+                },
+                "node_id": "7364a9ca-a155-4328-832d-fa3b818dd2e9",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 0,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "0/0"
+                },
+                "node_id": "b49505fd-4f50-4659-bf39-9d548190663f",
+                "port_number": 0
+            }
+        ],
+        "project_id": "b6bf1cd6-8d58-41d4-941c-893020abd2a3",
+        "suspend": false
+    },
+    {
+        "capture_compute_id": null,
+        "capture_file_name": null,
+        "capture_file_path": null,
+        "capturing": false,
+        "filters": {},
+        "link_id": "408309e9-c780-408b-ae77-56d3db60ccaa",
+        "link_style": {},
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 2,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "2/0"
+                },
+                "node_id": "7364a9ca-a155-4328-832d-fa3b818dd2e9",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 0,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "0/0"
+                },
+                "node_id": "c62b0bdd-3bd2-4b84-a531-36450236378e",
+                "port_number": 0
+            }
+        ],
+        "project_id": "b6bf1cd6-8d58-41d4-941c-893020abd2a3",
+        "suspend": false
+    },
+    {
+        "capture_compute_id": null,
+        "capture_file_name": null,
+        "capture_file_path": null,
+        "capturing": false,
+        "filters": {},
+        "link_id": "428e92b4-9114-4a49-a962-d059f37b3417",
+        "link_style": {},
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 0,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "0/0"
+                },
+                "node_id": "79ecb26c-c164-457b-96d8-585b657898dd",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 2,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "2/0"
+                },
+                "node_id": "b49505fd-4f50-4659-bf39-9d548190663f",
+                "port_number": 0
+            }
+        ],
+        "project_id": "b6bf1cd6-8d58-41d4-941c-893020abd2a3",
+        "suspend": false
+    },
+    {
+        "capture_compute_id": null,
+        "capture_file_name": null,
+        "capture_file_path": null,
+        "capturing": false,
+        "filters": {},
+        "link_id": "b47707a1-0ebb-4682-bdb4-b6b476687233",
+        "link_style": {},
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 0,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "0/0"
+                },
+                "node_id": "0bcee0ff-e8d2-40ac-8cc4-c0be6417a586",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 3,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "3/0"
+                },
+                "node_id": "b49505fd-4f50-4659-bf39-9d548190663f",
+                "port_number": 0
+            }
+        ],
+        "project_id": "b6bf1cd6-8d58-41d4-941c-893020abd2a3",
+        "suspend": false
+    },
+    {
+        "capture_compute_id": null,
+        "capture_file_name": null,
+        "capture_file_path": null,
+        "capturing": false,
+        "filters": {},
+        "link_id": "116adc59-806a-4b00-b4c2-ca383b60d435",
+        "link_style": {},
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 0,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "0/0"
+                },
+                "node_id": "b887e5f0-4f9e-47ec-8515-f810cad32180",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 2,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "2/0"
+                },
+                "node_id": "c62b0bdd-3bd2-4b84-a531-36450236378e",
+                "port_number": 0
+            }
+        ],
+        "project_id": "b6bf1cd6-8d58-41d4-941c-893020abd2a3",
+        "suspend": false
+    },
+    {
+        "capture_compute_id": null,
+        "capture_file_name": null,
+        "capture_file_path": null,
+        "capturing": false,
+        "filters": {},
+        "link_id": "411f5126-834a-41cc-b4e8-bd73025193e7",
+        "link_style": {},
+        "link_type": "ethernet",
+        "nodes": [
+            {
+                "adapter_number": 0,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "0/0"
+                },
+                "node_id": "28c8499e-1edd-4a5c-b2ff-df027bbbfd8e",
+                "port_number": 0
+            },
+            {
+                "adapter_number": 3,
+                "label": {
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "3/0"
+                },
+                "node_id": "c62b0bdd-3bd2-4b84-a531-36450236378e",
+                "port_number": 0
+            }
+        ],
+        "project_id": "b6bf1cd6-8d58-41d4-941c-893020abd2a3",
+        "suspend": false
+    }
+]

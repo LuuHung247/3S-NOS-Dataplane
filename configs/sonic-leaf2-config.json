@@ -1,0 +1,23 @@
+{
+    "INTERFACE": {
+        "Ethernet0": {},
+        "Ethernet0|10.0.2.2/30": {}
+    },
+    "VLAN": {
+        "Vlan100": { "vlanid": "100" },
+        "Vlan300": { "vlanid": "300" }
+    },
+    "VLAN_MEMBER": {
+        "Vlan100|Ethernet4": { "tagging_mode": "untagged" },
+        "Vlan300|Ethernet8": { "tagging_mode": "untagged" }
+    },
+    "VLAN_INTERFACE": {
+        "Vlan100": {},
+        "Vlan100|10.2.100.1/24": {},
+        "Vlan300": {},
+        "Vlan300|10.2.50.1/24": {}
+    },
+    "STATIC_ROUTE": {
+        "0.0.0.0/0": { "nexthop": "10.0.2.1", "ifname": "Ethernet0" }
+    }
+}

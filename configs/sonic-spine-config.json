@@ -1,0 +1,14 @@
+{
+    "INTERFACE": {
+        "Ethernet4": {},
+        "Ethernet4|10.0.1.1/30": {},
+        "Ethernet8": {},
+        "Ethernet8|10.0.2.1/30": {}
+    },
+    "STATIC_ROUTE": {
+        "10.1.100.0/24": { "nexthop": "10.0.1.2", "ifname": "Ethernet4" },
+        "10.1.200.0/24": { "nexthop": "10.0.1.2", "ifname": "Ethernet4" },
+        "10.2.100.0/24": { "nexthop": "10.0.2.2", "ifname": "Ethernet8" },
+        "10.2.50.0/24": { "nexthop": "10.0.2.2", "ifname": "Ethernet8" }
+    }
+}

@@ -1,0 +1,116 @@
+[961194 - Suricata-Main] 2026-04-15 02:45:37 Notice: suricata: This is Suricata version 8.0.4 RELEASE running in SYSTEM mode
+[961194 - Suricata-Main] 2026-04-15 02:45:37 Info: cpu: CPUs/cores online: 20
+[961194 - Suricata-Main] 2026-04-15 02:45:37 Info: suricata: Running suricata under test mode
+[961194 - Suricata-Main] 2026-04-15 02:45:37 Info: suricata: Setting engine mode to IDS mode by default
+[961194 - Suricata-Main] 2026-04-15 02:45:37 Info: app-layer-ftp: Parser disabled for ftp protocol. Protocol detection still on.
+[961194 - Suricata-Main] 2026-04-15 02:45:37 Info: app-layer-smtp: Protocol detection and parser disabled for smtp protocol.
+[961194 - Suricata-Main] 2026-04-15 02:45:37 Info: suricata: Preparing unexpected signal handling
+[961194 - Suricata-Main] 2026-04-15 02:45:38 Notice: stream-tcp: stream.reassembly.depth set to unlimited by default
+[961194 - Suricata-Main] 2026-04-15 02:45:38 Info: logopenfile: fast output device (regular) initialized: fast.log
+[961194 - Suricata-Main] 2026-04-15 02:45:38 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[961194 - Suricata-Main] 2026-04-15 02:45:38 Error: output-json-stats: eve.stats: stats are disabled globally: set stats.enabled to true. See https://docs.suricata.io/en/suricata-8.0.4/configuration/suricata-yaml.html#stats
+[961194 - Suricata-Main] 2026-04-15 02:45:38 Error: runmodes: unable to initialize sub-module eve-log.stats
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Notice: suricata: This is Suricata version 8.0.4 RELEASE running in SYSTEM mode
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Info: cpu: CPUs/cores online: 20
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Info: suricata: Running suricata under test mode
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Info: suricata: Setting engine mode to IDS mode by default
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Info: app-layer-ftp: Parser disabled for ftp protocol. Protocol detection still on.
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Info: app-layer-smtp: Protocol detection and parser disabled for smtp protocol.
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Info: suricata: Preparing unexpected signal handling
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Notice: stream-tcp: stream.reassembly.depth set to unlimited by default
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Info: logopenfile: fast output device (regular) initialized: fast.log
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Error: output-json-stats: eve.stats: stats are disabled globally: set stats.enabled to true. See https://docs.suricata.io/en/suricata-8.0.4/configuration/suricata-yaml.html#stats
+[961218 - Suricata-Main] 2026-04-15 02:45:44 Error: runmodes: unable to initialize sub-module eve-log.stats
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Notice: suricata: This is Suricata version 8.0.4 RELEASE running in SYSTEM mode
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Info: cpu: CPUs/cores online: 20
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Info: suricata: Running suricata under test mode
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Info: suricata: Setting engine mode to IDS mode by default
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Info: app-layer-ftp: Parser disabled for ftp protocol. Protocol detection still on.
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Info: app-layer-smtp: Protocol detection and parser disabled for smtp protocol.
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Info: suricata: Preparing unexpected signal handling
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Notice: stream-tcp: stream.reassembly.depth set to unlimited by default
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Info: logopenfile: fast output device (regular) initialized: fast.log
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Error: output-json-stats: eve.stats: stats are disabled globally: set stats.enabled to true. See https://docs.suricata.io/en/suricata-8.0.4/configuration/suricata-yaml.html#stats
+[961242 - Suricata-Main] 2026-04-15 02:45:50 Error: runmodes: unable to initialize sub-module eve-log.stats
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Notice: suricata: This is Suricata version 8.0.4 RELEASE running in SYSTEM mode
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Info: cpu: CPUs/cores online: 20
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Info: suricata: Running suricata under test mode
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Info: suricata: Setting engine mode to IDS mode by default
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Info: app-layer-ftp: Parser disabled for ftp protocol. Protocol detection still on.
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Info: app-layer-smtp: Protocol detection and parser disabled for smtp protocol.
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Info: suricata: Preparing unexpected signal handling
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Notice: stream-tcp: stream.reassembly.depth set to unlimited by default
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Info: logopenfile: fast output device (regular) initialized: fast.log
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Error: output-json-stats: eve.stats: stats are disabled globally: set stats.enabled to true. See https://docs.suricata.io/en/suricata-8.0.4/configuration/suricata-yaml.html#stats
+[961264 - Suricata-Main] 2026-04-15 02:45:53 Error: runmodes: unable to initialize sub-module eve-log.stats
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Notice: suricata: This is Suricata version 8.0.4 RELEASE running in SYSTEM mode
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Info: cpu: CPUs/cores online: 20
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Info: suricata: Running suricata under test mode
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Info: suricata: Setting engine mode to IDS mode by default
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Info: app-layer-ftp: Parser disabled for ftp protocol. Protocol detection still on.
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Info: app-layer-smtp: Protocol detection and parser disabled for smtp protocol.
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Info: suricata: Preparing unexpected signal handling
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Notice: stream-tcp: stream.reassembly.depth set to unlimited by default
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Info: logopenfile: fast output device (regular) initialized: fast.log
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Error: output-json-stats: eve.stats: stats are disabled globally: set stats.enabled to true. See https://docs.suricata.io/en/suricata-8.0.4/configuration/suricata-yaml.html#stats
+[961298 - Suricata-Main] 2026-04-15 02:47:33 Error: runmodes: unable to initialize sub-module eve-log.stats
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Notice: suricata: This is Suricata version 8.0.4 RELEASE running in SYSTEM mode
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Info: cpu: CPUs/cores online: 20
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Info: suricata: Running suricata under test mode
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Info: suricata: Setting engine mode to IDS mode by default
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Info: exception-policy: master exception-policy set to: auto
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Info: suricata: Preparing unexpected signal handling
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Info: logopenfile: fast output device (regular) initialized: fast.log
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Info: logopenfile: stats output device (regular) initialized: stats.log
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: Signature missing required value "sid".
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature "alert ip 10.1.100.0/24 any -> 10.1.200.0/24 any (" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 12
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: no rule options.
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature ")" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 17
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: Signature missing required value "sid".
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature "alert ip 10.1.200.0/24 any -> !10.1.200.0/24 any (" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 20
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: no rule options.
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature ")" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 25
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: Signature missing required value "sid".
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature "alert ip 10.2.100.0/24 any -> 10.1.100.0/24 any (" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 29
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: no rule options.
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature ")" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 34
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: Signature missing required value "sid".
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature "alert ip 10.1.100.0/24 any -> 10.2.50.0/24 any (" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 37
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: no rule options.
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature ")" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 42
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: Signature missing required value "sid".
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature "alert ip 10.2.100.0/24 any -> 10.2.50.0/24 any (" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 45
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: no rule options.
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature ")" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 50
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: Signature missing required value "sid".
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature "alert icmp any any -> any any (" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 54
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: no rule options.
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature ")" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 61
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: Signature missing required value "sid".
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature "alert tcp any any -> any any (" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 64
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: no rule options.
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature ")" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 71
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: Signature missing required value "sid".
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature "alert ip 10.2.50.0/24 any -> any any (" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 75
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect-parse: no rule options.
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: detect: error parsing signature ")" from file /3s-com/zma/suricata/rules/zt-lab.rules at line 81
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Warning: detect: 1 rule files specified, but no rules were loaded!
+[961338 - Suricata-Main] 2026-04-15 02:47:39 Error: suricata: Loading signatures failed.
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Notice: suricata: This is Suricata version 8.0.4 RELEASE running in SYSTEM mode
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: cpu: CPUs/cores online: 20
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: suricata: Running suricata under test mode
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: suricata: Setting engine mode to IDS mode by default
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: exception-policy: master exception-policy set to: auto
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: suricata: Preparing unexpected signal handling
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: logopenfile: fast output device (regular) initialized: fast.log
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: logopenfile: eve-log output device (regular) initialized: eve.json
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: logopenfile: stats output device (regular) initialized: stats.log
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: detect: 1 rule files processed. 8 rules successfully loaded, 0 rules failed, 0 rules skipped
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: threshold-config: Threshold config parsed: 0 rule(s) found
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Info: detect: 8 signatures processed. 5 are IP-only rules, 0 are inspecting packet payload, 0 inspect application layer, 0 are decoder event only
+[961386 - Suricata-Main] 2026-04-15 02:47:58 Notice: suricata: Configuration provided was successfully loaded. Exiting.

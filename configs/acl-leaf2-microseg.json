@@ -1,0 +1,45 @@
+{
+    "ACL_TABLE": {
+        "MICROSEG_LEAF2": {
+            "type": "L3",
+            "policy_desc": "ZT Microsegmentation Policy - Leaf2",
+            "stage": "ingress",
+            "ports": ["Ethernet4", "Ethernet8"]
+        }
+    },
+    "ACL_RULE": {
+        "MICROSEG_LEAF2|RULE_10_WEB_TO_APP": {
+            "PRIORITY": "1000",
+            "DESCRIPTION": "Allow Web (Leaf2) to App zone on API port 8080",
+            "SRC_IP": "10.2.100.0/24",
+            "DST_IP": "10.2.50.0/24",
+            "IP_PROTOCOL": "6",
+            "L4_DST_PORT": "8080",
+            "PACKET_ACTION": "FORWARD"
+        },
+        "MICROSEG_LEAF2|RULE_20_CROSSLEAF_WEB_TO_APP": {
+            "PRIORITY": "999",
+            "DESCRIPTION": "Allow cross-leaf Web (Leaf1) to App zone",
+            "SRC_IP": "10.1.100.0/24",
+            "DST_IP": "10.2.50.0/24",
+            "IP_PROTOCOL": "6",
+            "L4_DST_PORT": "8080",
+            "PACKET_ACTION": "FORWARD"
+        },
+        "MICROSEG_LEAF2|RULE_30_APP_RETURN": {
+            "PRIORITY": "998",
+            "DESCRIPTION": "Allow App return traffic to Web zones",
+            "SRC_IP": "10.2.50.0/24",
+            "IP_PROTOCOL": "6",
+            "L4_SRC_PORT": "8080",
+            "PACKET_ACTION": "FORWARD"
+        },
+        "MICROSEG_LEAF2|DEFAULT_DENY": {
+            "PRIORITY": "1",
+            "DESCRIPTION": "Zero Trust Default Deny",
+            "SRC_IP": "0.0.0.0/0",
+            "DST_IP": "0.0.0.0/0",
+            "PACKET_ACTION": "DROP"
+        }
+    }
+}

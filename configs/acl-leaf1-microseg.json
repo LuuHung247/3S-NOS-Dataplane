@@ -1,0 +1,55 @@
+{
+    "ACL_TABLE": {
+        "MICROSEG_LEAF1": {
+            "type": "L3",
+            "policy_desc": "ZT Microsegmentation Policy - Leaf1",
+            "stage": "ingress",
+            "ports": ["Ethernet4", "Ethernet8"]
+        }
+    },
+    "ACL_RULE": {
+        "MICROSEG_LEAF1|RULE_10_WEB_TO_DB": {
+            "PRIORITY": "1000",
+            "DESCRIPTION": "Allow Web zone to DB zone on MySQL port 3306",
+            "SRC_IP": "10.1.100.0/24",
+            "DST_IP": "10.1.200.0/24",
+            "IP_PROTOCOL": "6",
+            "L4_DST_PORT": "3306",
+            "PACKET_ACTION": "FORWARD"
+        },
+        "MICROSEG_LEAF1|RULE_20_DB_RETURN": {
+            "PRIORITY": "999",
+            "DESCRIPTION": "Allow DB return traffic to Web zone",
+            "SRC_IP": "10.1.200.0/24",
+            "DST_IP": "10.1.100.0/24",
+            "IP_PROTOCOL": "6",
+            "L4_SRC_PORT": "3306",
+            "PACKET_ACTION": "FORWARD"
+        },
+        "MICROSEG_LEAF1|RULE_30_WEB_TO_APP": {
+            "PRIORITY": "998",
+            "DESCRIPTION": "Allow Web (Leaf1) to App zone on API port 8080",
+            "SRC_IP": "10.1.100.0/24",
+            "DST_IP": "10.2.50.0/24",
+            "IP_PROTOCOL": "6",
+            "L4_DST_PORT": "8080",
+            "PACKET_ACTION": "FORWARD"
+        },
+        "MICROSEG_LEAF1|RULE_40_APP_RETURN": {
+            "PRIORITY": "997",
+            "DESCRIPTION": "Allow App return traffic to Web (Leaf1)",
+            "SRC_IP": "10.2.50.0/24",
+            "DST_IP": "10.1.100.0/24",
+            "IP_PROTOCOL": "6",
+            "L4_SRC_PORT": "8080",
+            "PACKET_ACTION": "FORWARD"
+        },
+        "MICROSEG_LEAF1|DEFAULT_DENY": {
+            "PRIORITY": "1",
+            "DESCRIPTION": "Zero Trust Default Deny - Block all unmatched traffic",
+            "SRC_IP": "0.0.0.0/0",
+            "DST_IP": "0.0.0.0/0",
+            "PACKET_ACTION": "DROP"
+        }
+    }
+}
