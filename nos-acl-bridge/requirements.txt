@@ -1,0 +1,4 @@
+grpcio>=1.59.0
+grpcio-tools>=1.59.0
+cryptography>=41.0.0
+redis>=5.0.0

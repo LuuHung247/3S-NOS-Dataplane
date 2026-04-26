@@ -1,0 +1,32 @@
+[Unit]
+Description=3S-NOS ACL Bridge — gNMI :9339 → ConfigDB + iptables
+Documentation=https://github.com/3s-com/nos-acl-bridge
+After=network.target swss.service
+Requires=swss.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/nos-acl-bridge/bridge
+
+ExecStart=/usr/bin/python3 /opt/nos-acl-bridge/bridge/nos_acl_bridge.py
+Restart=always
+RestartSec=5
+
+# Allow iptables manipulation without full root capabilities
+CapabilityBoundingSet=CAP_NET_ADMIN CAP_NET_RAW
+AmbientCapabilities=CAP_NET_ADMIN CAP_NET_RAW
+
+# Logging to journald
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nos-acl-bridge
+
+# Hardening
+PrivateTmp=true
+NoNewPrivileges=false
+ProtectSystem=strict
+ReadWritePaths=/etc/nos-acl-bridge /run /tmp
+
+[Install]
+WantedBy=multi-user.target

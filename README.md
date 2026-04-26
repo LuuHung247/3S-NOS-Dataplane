@@ -19,6 +19,10 @@
 | Suricata rule SC-3b APP→DB lateral movement (SID 9000006) | **DONE** | **2026-04-19** |
 | iptables DNAT — IDS API expose qua 10.10.6.238:8765 | **DONE** | **2026-04-19** |
 | Demo scenarios (SC-1 → SC-5) + browser test checklist | **DONE** | **2026-04-19** |
+| Full end-to-end test — 5/5 SC PASS, FPR=0, 8/8 browser PASS | **DONE** | **2026-04-19** |
+| Go IDS Agent — WebSocket real-time stream thay polling | **DONE** | **2026-04-19** |
+| Docker Compose setup (ids-agent + nextjs) | **DONE** | **2026-04-19** |
+| **nos-acl-bridge gNMI server — LEAF-1 + LEAF-2** | **DONE** | **2026-04-26** |
 | Thesis documentation / evaluation | TODO | |
 
 ## Kiến trúc hiện tại — Direct LEAF↔IDS + tc mirred + Alert API
@@ -238,7 +242,7 @@ sudo ip route add 10.0.2.1/32 dev eth0 src 10.0.2.2
 
 Suricata chỉ có 8 rules khi khởi động (SID 9000001–9000011, 9000020). Thiếu rule cho
 `10.2.100.0/24 → 10.1.200.0/24` (APP→DB) — kịch bản multi-hop lateral movement quan trọng nhất của thesis.
-Fix: append SID 9000006 vào `/etc/suricata/rules/zt-lab.rules` qua telnet console 5018,
+Fix: append SID 9000006 vào `/etc/suricata/rules/3s-nos.rules` qua telnet console 5018,
 reload với `kill -USR2 $(cat /var/run/suricata.pid)`. Suricata log: `9 rules successfully loaded`.
 
 ### 3. IDS internet access — double NAT (fix 2026-04-18)
@@ -371,28 +375,254 @@ IDS eth1 (10.99.1.2) → LEAF-2 eth4 (10.99.1.1) → MASQUERADE eth0
 
 Dùng để: `apk add suricata`, cập nhật rules, SSH vào IDS.
 
+## nos-acl-bridge — gNMI Dataplane API cho Secure Framework (2026-04-26)
+
+`nos-acl-bridge` là daemon Python chạy trên mỗi SONiC LEAF, expose **gNMI server trên port 9339** với mTLS.
+Secure Framework (ONAP SF / Agent-IDS) gửi `gNMI Set` → bridge ghi ConfigDB DB4 + apply iptables FORWARD.
+
+### Kiến trúc
+
+```
+Secure Framework (ONAP SF / Agent-IDS)
+        │  gNMI Set/Get/Delete  (mTLS, port 9339)
+        ▼
+  nos-acl-bridge (Python, /opt/nos-acl-bridge/)
+        │                      │
+        ▼                      ▼
+  ConfigDB DB4           iptables FORWARD
+  NOS_IPTABLES_RULE|*    (kernel netfilter)
+```
+
+### Trạng thái deploy
+
+| Node | IP | Port | Status |
+|------|----|------|--------|
+| LEAF-1 | 192.168.122.20 | 9339 | **active** — verified 2026-04-26 |
+| LEAF-2 | 192.168.122.21 | 9339 | **active** — verified 2026-04-26 |
+
+### RBAC — mTLS client certificate (OU field)
+
+| OU trong cert | Role | Quyền |
+|---------------|------|-------|
+| `internal` / `sdnc` | ADMIN | Full CRUD mọi rule |
+| `aws` | OPERATOR | Get/Set nhưng không delete |
+| `auto` | AGENT | Chỉ push rule `action=DROP`, `source=ids-auto` |
+| Khác | DENY | Bị reject ngay |
+
+### Cert paths
+
+```
+# Server certs (trên LEAF — tự động deploy bởi 15-deploy-bridge.py)
+/etc/nos-acl-bridge/certs/server.crt
+/etc/nos-acl-bridge/certs/server.key
+/etc/nos-acl-bridge/certs/trustedCertificates.crt
+
+# Client certs (trên GNS3VM — dùng để test / SF kết nối)
+zma/gnmic-test/client.crt       # OU=internal → ADMIN  (smoke test)
+zma/gnmic-test/client.key
+zma/gnmic-test/trustedCertificates.crt
+zma/agent-ids/client.crt        # OU=auto → AGENT  (Agent-IDS SF)
+zma/agent-ids/client.key
+```
+
+### YANG model — nos-iptables
+
+Module: `nos-iptables`, namespace `urn:3snos:iptables`
+
+| Field | Type | Bắt buộc | Ghi chú |
+|-------|------|----------|---------|
+| `rule-id` | string (pattern `[a-zA-Z0-9_\-]{1,64}`) | Có | Key |
+| `action` | `ACCEPT` \| `DROP` \| `RETURN` | Có | |
+| `src-ip` | ipv4-prefix | Không | e.g. `10.1.100.5/32` |
+| `dst-ip` | ipv4-prefix | Không | e.g. `10.1.200.0/24` |
+| `protocol` | `tcp` \| `udp` \| `icmp` \| `all` | Không | default `all` |
+| `src-port` | 1–65535 | Không | Chỉ khi protocol=tcp/udp |
+| `dst-port` | 1–65535 | Không | Chỉ khi protocol=tcp/udp |
+| `priority` | 1–9999 | Không | <100→top, 100–999→mid, ≥1000→append |
+| `source` | `manual` \| `sdnc` \| `ids-auto` | Không | AGENT chỉ dùng `ids-auto` |
+| `comment` | string ≤256 | Không | |
+| `ttl-seconds` | 0–86400 | Không | 0=permanent |
+
+### gNMI API — ví dụ gnmic
+
+```bash
+cd /3s-com/zma
+
+# Capabilities
+gnmic -a 192.168.122.20:9339 \
+  --tls-cert gnmic-test/client.crt \
+  --tls-key  gnmic-test/client.key \
+  --tls-ca   gnmic-test/trustedCertificates.crt \
+  capabilities
+
+# Set (thêm/cập nhật rule)
+cat > /tmp/rule.json << 'EOF'
+{
+  "rule-id": "block-web-db",
+  "action": "DROP",
+  "src-ip": "10.1.100.0/24",
+  "dst-ip": "10.1.200.0/24",
+  "protocol": "tcp",
+  "priority": 100,
+  "source": "sdnc",
+  "comment": "ZT: WEB zone blocked to DB zone"
+}
+EOF
+
+gnmic -a 192.168.122.20:9339 \
+  --tls-cert gnmic-test/client.crt --tls-key gnmic-test/client.key \
+  --tls-ca   gnmic-test/trustedCertificates.crt \
+  -e json_ietf set \
+  --update-path '/nos-iptables:acl/rule[rule-id=block-web-db]' \
+  --update-file /tmp/rule.json
+
+# Get rule
+gnmic -a 192.168.122.20:9339 \
+  --tls-cert gnmic-test/client.crt --tls-key gnmic-test/client.key \
+  --tls-ca   gnmic-test/trustedCertificates.crt \
+  get --path '/nos-iptables:acl/rule[rule-id=block-web-db]'
+
+# Delete rule
+gnmic -a 192.168.122.20:9339 \
+  --tls-cert gnmic-test/client.crt --tls-key gnmic-test/client.key \
+  --tls-ca   gnmic-test/trustedCertificates.crt \
+  set --delete '/nos-iptables:acl/rule[rule-id=block-web-db]'
+
+# Agent-IDS dùng cert riêng (OU=auto, chỉ DROP + source=ids-auto)
+gnmic -a 192.168.122.20:9339 \
+  --tls-cert agent-ids/client.crt --tls-key agent-ids/client.key \
+  --tls-ca   gnmic-test/trustedCertificates.crt \
+  -e json_ietf set \
+  --update-path '/nos-iptables:acl/rule[rule-id=ids-block-001]' \
+  --update-file /tmp/ids-rule.json
+```
+
+### Pipeline xác nhận (verified 2026-04-26)
+
+Sau khi `gNMI Set` thành công:
+```bash
+# Kiểm tra ConfigDB trên LEAF (telnet 127.0.0.1 5010)
+sudo redis-cli -n 4 HGETALL "NOS_IPTABLES_RULE|block-web-db"
+
+# Kiểm tra iptables
+sudo iptables -L FORWARD -n | grep "block-web-db"
+# Expected: DROP  tcp -- 10.1.100.0/24  10.1.200.0/24  /* nos:block-web-db ... */
+
+# Journal bridge
+sudo journalctl -u nos-acl-bridge --no-pager -n 10
+```
+
+### Deploy / Re-deploy
+
+```bash
+cd /3s-com/zma/dc-fabric-setup
+
+# Deploy cả 2 LEAF (khoảng 3 phút — pip install + file copy + systemd)
+python3 15-deploy-bridge.py --both
+
+# Deploy riêng lẻ
+python3 15-deploy-bridge.py --leaf1   # LEAF-1 (192.168.122.20)
+python3 15-deploy-bridge.py --leaf2   # LEAF-2 (192.168.122.21)
+```
+
+> **Lưu ý deploy:** SONiC LEAF không có internet → pip install lấy từ cache local.
+> Script dùng `curl` (không dùng `wget` — không có trên SONiC).
+> Proto stubs (`gnmi_pb2*.py`) phải generate bằng grpcio-tools **1.58** (không phải 1.70+).
+
+### Files bridge trên LEAF
+
+```
+/opt/nos-acl-bridge/
+  bridge/
+    nos_acl_bridge.py   ← gNMI server chính (Capabilities/Get/Set)
+    iptables.py         ← apply/remove/list iptables rules
+    validators.py       ← schema validation + RBAC enforcement
+    recovery.py         ← startup reconcile ConfigDB ↔ iptables
+  generated/
+    gnmi_pb2.py         ← Proto stubs (grpcio-tools 1.58)
+    gnmi_pb2_grpc.py    ← gRPC stubs (grpcio-tools 1.58)
+/etc/nos-acl-bridge/certs/
+  server.crt / server.key / trustedCertificates.crt
+/etc/systemd/system/nos-acl-bridge.service
+```
+
+### Source trên GNS3VM
+
+```
+/3s-com/zma/nos-acl-bridge/
+  bridge/         ← Python source (sync lên LEAF qua HTTP serve)
+  generated/      ← Proto stubs grpcio-tools 1.58
+  nos-acl-bridge.service
+/3s-com/zma/dc-fabric-setup/
+  15-deploy-bridge.py   ← Deploy script
+/3s-com/zma/output_3snos/sonic/
+  leaf-1/{server.crt,server.key,trustedCertificates.crt}
+  leaf-2/{server.crt,server.key,trustedCertificates.crt}
+/3s-com/zma/gnmic-test/
+  client.crt / client.key / trustedCertificates.crt  ← ADMIN cert (test)
+/3s-com/zma/agent-ids/
+  client.crt / client.key                            ← AGENT cert (SF)
+```
+
+---
+
 ## Web Dashboard — threatcrush (2026-04-19)
 
-Next.js 16 dashboard tại `/3s-com/threatcrush/`, monitor Suricata alerts real-time.
+Next.js 16 dashboard tại `/3s-com/threatcrush/` + Go IDS Agent tại `/3s-com/ids-agent/`.
+
+### Kiến trúc
+
+```
+Suricata :8765
+  ├─ SSE /stream ──────→ Go Agent :8766 ──→ WebSocket /ws ──→ Browser (realtime)
+  └─ REST /health /alerts → Go Agent :8766 → Next.js API routes → Browser
+```
+
+Browser kết nối WebSocket **thẳng tới Go Agent** (port 8766) — không qua Next.js.
+Next.js chỉ serve frontend + proxy REST qua Go Agent.
 
 ### Pages
 | Route | Mô tả |
 |---|---|
-| `/` | Dashboard overview — stats cards + recent alerts |
-| `/monitor` | Live monitor — polling 5s, filter Zone/Priority |
+| `/` | Dashboard overview — stats cards + recent 5 alerts |
+| `/monitor` | Live monitor — **WebSocket realtime**, filter Zone/Priority |
 | `/topology` | Spine-Leaf diagram + policy matrix |
-| `/rules` | Bảng Suricata ZT rules |
+| `/rules` | Bảng 9 Suricata ZT rules |
 
-### API Proxy (server-side, Next.js)
-| Route | Backend |
+### API Routes (Next.js proxy → Go Agent)
+| Route | Go Agent |
 |---|---|
-| `/api/ids/health` | `IDS_API_URL/health` |
-| `/api/ids/alerts?last=N` | `IDS_API_URL/alerts?last=N` |
+| `/api/ids/health` | `AGENT_URL/health` |
+| `/api/ids/alerts?last=N` | `AGENT_URL/alerts?last=N` |
+
+### Go IDS Agent (`/3s-com/ids-agent/`)
+| Endpoint | Mô tả |
+|---|---|
+| `GET /health` | Proxy → Suricata `/health` |
+| `GET /alerts?last=N` | Proxy → Suricata `/alerts` |
+| `GET /ws` | WebSocket — broadcast realtime alerts |
+
+Agent tự động kết nối SSE stream từ Suricata. Nếu SSE thất bại 5 lần → fallback polling 2s.
+Broadcast mỗi alert JSON tới tất cả WebSocket clients đang kết nối.
 
 ### Cấu hình `.env.local`
 ```bash
-# /3s-com/threatcrush/.env.local
-IDS_API_URL=http://10.10.6.238:8765   # Local subnet (không expose public)
+# /3s-com/threatcrush/.env.local — CHỌN 1 profile
+
+# Suricata IDS (luôn giữ nguyên)
+IDS_API_URL=http://10.10.6.238:8765
+
+# PROFILE 1: Local dev (ssh tunnel -L 3000:localhost:3000 -L 8766:localhost:8766)
+AGENT_URL=http://localhost:8766
+NEXT_PUBLIC_AGENT_WS_URL=ws://localhost:8766/ws
+
+# PROFILE 2: ONAP master (Next.js trên 10.10.6.231, Go Agent trên 10.10.6.238)
+# AGENT_URL=http://10.10.6.238:8766
+# NEXT_PUBLIC_AGENT_WS_URL=ws://10.10.6.238:8766/ws
+
+# PROFILE 3: Docker Compose
+# AGENT_URL=http://ids-agent:8766
+# NEXT_PUBLIC_AGENT_WS_URL=ws://<HOST_IP>:8766/ws
 ```
 
 ### iptables DNAT trên SONiC Node (10.10.6.238)
@@ -406,27 +636,42 @@ sudo iptables -t nat -A OUTPUT -p tcp --dport 8765 -j DNAT --to-destination 192.
 sudo iptables-save | sudo tee /etc/iptables/rules.v4
 ```
 
-### Chạy web
+### Chạy thủ công
 ```bash
-cd /3s-com/threatcrush
+# 1. Build Go Agent (chỉ cần làm 1 lần, hoặc sau khi sửa main.go)
+export PATH=$PATH:/home/dis/go/bin
+cd /3s-com/ids-agent && go build -o ids-agent .
 
-# Dev mode (Turbopack, cần inotify limit cao):
+# 2. Start Go Agent
+IDS_API_URL=http://10.10.6.238:8765 ./ids-agent &
+
+# 3. Start Next.js
+cd /3s-com/threatcrush
+pnpm build && pnpm start
+
+# Dev mode (Turbopack):
 sudo sysctl fs.inotify.max_user_watches=524288
 pnpm dev
-
-# Production:
-pnpm build && pnpm start
 ```
 
-### Deploy lên ONAP master (10.10.6.231)
+### Deploy Docker Compose
 ```bash
-# Copy code lên ONAP master
+# Edit docker-compose.yml: đổi <HOST_IP> thành IP máy host
+cd /3s-com
+docker compose up --build
+
+# Chỉ rebuild 1 service:
+docker compose up --build ids-agent
+```
+
+### Deploy lên ONAP master (10.10.6.231) — thủ công
+```bash
+# Copy code
 rsync -av /3s-com/threatcrush/ user@10.10.6.231:/opt/threatcrush/
+rsync -av /3s-com/ids-agent/   user@10.10.6.231:/opt/ids-agent/
 
-# Tạo .env.local trên ONAP master
-echo "IDS_API_URL=http://10.10.6.238:8765" > /opt/threatcrush/.env.local
-
-# Build + start
+# Trên ONAP master: dùng PROFILE 2 trong .env.local
+# Go Agent vẫn chạy trên GNS3 VM (10.10.6.238), Next.js chạy trên ONAP
 cd /opt/threatcrush && pnpm install && pnpm build && pnpm start
 ```
 
@@ -444,9 +689,21 @@ cd /opt/threatcrush && pnpm install && pnpm build && pnpm start
 ## Files trong project
 
 ```
-/3s-com/zma/
-├── README.md                  ← File này
-├── dc-fabric-setup/           ← Scripts + docs cho DC fabric
+/3s-com/
+├── docker-compose.yml         ← Chạy ids-agent + nextjs bằng 1 lệnh
+├── ids-agent/                 ← Go IDS Agent (WebSocket bridge)
+│   ├── main.go                ← SSE → WebSocket hub + REST proxy
+│   ├── go.mod / go.sum        ← Dependencies (gorilla/websocket)
+│   ├── ids-agent              ← Binary đã build
+│   └── Dockerfile             ← Multi-stage build (golang:1.22 → alpine)
+├── threatcrush/               ← Next.js 16 frontend
+│   ├── src/app/               ← Pages: /, /monitor, /topology, /rules
+│   ├── src/app/api/ids/       ← API proxy routes → Go Agent
+│   ├── .env.local             ← Config: 3 profile (local/ONAP/Docker)
+│   └── Dockerfile             ← Standalone Next.js build
+└── zma/
+    ├── README.md              ← File này
+    ├── dc-fabric-setup/       ← Scripts + docs cho DC fabric
 │   ├── README.md              ← Tài liệu chi tiết kiến trúc + root cause
 │   ├── 01-fix-forwarding.sh   ← Enable forwarding (chạy trên mọi SONiC node)
 │   ├── 02-setup-leaf1.sh      ← Config LEAF-1 (routes + ARP)
@@ -471,9 +728,9 @@ cd /opt/threatcrush && pnpm install && pnpm build && pnpm start
 ├── SONiC/                     ← SONiC related files
 ├── suricata/                  ← Suricata config + rules (host-side)
 │   ├── suricata-zt.yaml       ← Suricata config offline pcap mode (host)
-│   ├── rules/zt-lab.rules     ← Zero Trust detection rules (8 rules, sid 9000001+)
+│   ├── rules/3s-nos.rules     ← Zero Trust detection rules (8 rules, sid 9000001+)
 │   └── logs/                  ← eve.json, fast.log từ offline analysis
-├── threatcrush/               → /3s-com/threatcrush/ (web dashboard — symlink)
+├── threatcrush/               → /3s-com/threatcrush/ (symlink)
 ├── gns3-canvas.py             ← Xem topology GNS3
 ├── gns3-ssh-info.py           ← Lấy SSH info các nodes
 └── deploy.py                  ← Automation script (legacy)
@@ -482,7 +739,7 @@ cd /opt/threatcrush && pnpm install && pnpm build && pnpm start
 ### Suricata trên IDS Alpine node (live):
 ```
 /etc/suricata/suricata-zt.yaml   ← af-packet config (eth0 + eth1)
-/etc/suricata/rules/zt-lab.rules ← 8 ZT detection rules
+/etc/suricata/rules/3s-nos.rules ← 8 ZT detection rules
 /var/log/suricata/eve.json       ← Live alerts (JSON)
 /var/log/suricata/fast.log       ← Live alerts (text)
 /var/log/suricata/suricata.log   ← Suricata daemon log

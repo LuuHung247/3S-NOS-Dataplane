@@ -1,0 +1,236 @@
+[2026-04-26T14:31:33.325946+00:00] ℹ [f11e1652] [SYSTEM] startup: 3S-NOS Secure Framework starting 
+
+[CertOverride] ./certificate/generate/output_3snos/gnmic-test/client.crt
+[CertOverride] subject=CN = gnmic-test, O = 3SNOS-TEST, OU = internal
+[CertOverride] Bridge RBAC enforced by OU above.
+
+
+======================================================================
+3S-NOS Secure Framework — connecting gNMI pool to bridge endpoints
+======================================================================
+[NosPool] Connecting admin@192.168.122.20:9339 (TLS CN=sonic-leaf-1) ...
+✓ Connected to gNMI server at 192.168.122.20:9339 (TLS secured)
+  Client cert: ./certificate/generate/output_3snos/gnmic-test/client.crt
+  CA cert: ./certificate/generate/output_3snos/gnmic-test/trustedCertificates.crt
+  TLS hostname override: sonic-leaf-1
+[NosPool] ✓ admin@192.168.122.20
+[NosPool] Connecting admin@192.168.122.21:9339 (TLS CN=sonic-leaf-2) ...
+✓ Connected to gNMI server at 192.168.122.21:9339 (TLS secured)
+  Client cert: ./certificate/generate/output_3snos/gnmic-test/client.crt
+  CA cert: ./certificate/generate/output_3snos/gnmic-test/trustedCertificates.crt
+  TLS hostname override: sonic-leaf-2
+[NosPool] ✓ admin@192.168.122.21
+[NosPool] Connecting operator@192.168.122.20:9339 (TLS CN=sonic-leaf-1) ...
+✓ Connected to gNMI server at 192.168.122.20:9339 (TLS secured)
+  Client cert: ./certificate/generate/output_3snos/gnmic-test/client.crt
+  CA cert: ./certificate/generate/output_3snos/gnmic-test/trustedCertificates.crt
+  TLS hostname override: sonic-leaf-1
+[NosPool] ✓ operator@192.168.122.20
+[NosPool] Connecting operator@192.168.122.21:9339 (TLS CN=sonic-leaf-2) ...
+✓ Connected to gNMI server at 192.168.122.21:9339 (TLS secured)
+  Client cert: ./certificate/generate/output_3snos/gnmic-test/client.crt
+  CA cert: ./certificate/generate/output_3snos/gnmic-test/trustedCertificates.crt
+  TLS hostname override: sonic-leaf-2
+[NosPool] ✓ operator@192.168.122.21
+  ✓ admin@192.168.122.20
+[2026-04-26T14:31:33.470905+00:00] ℹ [d86845f6] [GNMI] connect: admin@192.168.122.20 connected 
+  ✓ admin@192.168.122.21
+[2026-04-26T14:31:33.471598+00:00] ℹ [18768215] [GNMI] connect: admin@192.168.122.21 connected 
+  ✓ operator@192.168.122.20
+[2026-04-26T14:31:33.471864+00:00] ℹ [d218d749] [GNMI] connect: operator@192.168.122.20 connected 
+  ✓ operator@192.168.122.21
+[2026-04-26T14:31:33.472091+00:00] ℹ [53e9516c] [GNMI] connect: operator@192.168.122.21 connected 
+
+======================================================================
+3S-NOS Secure Framework — READY
+======================================================================
+  NETCONF listen : 0.0.0.0:6513    (mTLS for ONAP SDNC)
+  LEAF-1 bridge  : 192.168.122.20:9339
+  LEAF-2 bridge  : 192.168.122.21:9339
+  Role API       : http://0.0.0.0:9090
+
+Policies (OnapRole → SonicRole):
+  admin    → [admin, operator] (default: admin)
+  operator → [operator] (default: operator)
+  auto     → [admin] (default: admin)
+======================================================================
+
+
+======================================================================
+[RoleAPI] Role & Policy API started on port 9090 (Multi-Client Mode)
+======================================================================
+[RoleAPI] Session Endpoints:
+         GET  /sessions         - List active client sessions
+         GET  /pool             - gNMI connection pool status
+         GET  /interfaces       - List available interfaces from SONiC
+======================================================================
+[RoleAPI] Policy Endpoints:
+         GET  /policy            - Get all ONAP→SONiC policies
+         GET  /policy/{onap}    - Get policy for ONAP role
+         POST /policy/{onap}    - Update policy mapping
+         POST /policy/reset      - Reset to default policies
+======================================================================
+
+[2026-04-26T14:31:33.521572+00:00] ℹ [bf147937] [API] start: Role API on :9090 
+[TLS] Server certificate: /3s-com/zma/secure-framework/certificate/server/server.crt
+[TLS] Server private key: /3s-com/zma/secure-framework/certificate/server/server.key
+[TLS] CA file for client verification: /3s-com/zma/secure-framework/certificate/server/trustedCertificates.crt
+[TLS] Client certificate required: False
+[2026-04-26T14:31:33.522265+00:00] ℹ [626de6da] [NETCONF] start: NETCONF on :6513 
+[TLS] Client certificate: NONE (one-way TLS)
+
+================================================================================
+NETCONF over TLS Server (Multi-Client Certificate Support)
+================================================================================
+Listening on port: 6513
+Server certificate: /3s-com/zma/secure-framework/certificate/server/server.crt
+Client cert required: False
+gNMI Pool port: 9339
+  ✓ admin@192.168.122.20 (leaf-1)
+  ✓ operator@192.168.122.20 (leaf-1)
+  ✓ admin@192.168.122.21 (leaf-2)
+  ✓ operator@192.168.122.21 (leaf-2)
+================================================================================
+
+Waiting for SDN-C connections...
+
+[DEBUG] About to enter accept() loop...
+
+[('10.10.6.231', 56330)] TCP connection accepted, starting TLS handshake...
+[('10.10.6.231', 56330)] ✓ TLS handshake successful
+[('10.10.6.231', 56330)] Protocol: TLSv1.3, Cipher: TLS_AES_256_GCM_SHA384
+
+================================================================================
+[CONNECTION] New NETCONF client from ('10.10.6.231', 56330)
+================================================================================
+[('10.10.6.231', 56330)] No client certificate provided
+[Auth] No client cert → default role: admin
+[Session] ('10.10.6.231', 56330) CN:N/A ONAP:admin SONiC:admin
+[('10.10.6.231', 56330)] Session context created:
+             ONAP role: admin
+             SONiC role: admin
+             Allowed: ['admin', 'operator']
+[('10.10.6.231', 56330)] Using gNMI admin connection
+[('10.10.6.231', 56330)] Starting NETCONF session...
+[('10.10.6.231', 56330)] Session NetconfServerSession{sessionId=1} starting
+[('10.10.6.231', 56330)] Starting NETCONF hello message exchange...
+[YANG] Using base capabilities only (auto-discovery disabled to avoid ONAP validation errors)
+
+================================================================================
+[('10.10.6.231', 56330)] HELLO SENT: 3763 bytes
+================================================================================
+<?xml version="1.0" encoding="UTF-8"?>
+<hello xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <capabilities>
+        <capability>urn:ietf:params:netconf:base:1.0</capability>
+        <capability>urn:ietf:params:netconf:base:1.1</capability>
+        <capability>urn:ietf:params:netconf:capability:writable-running:1.0</capability>
+        <capability>urn:ietf:params:netconf:capability:candidate:1.0</capability>
+        <capability>urn:ietf:params:netconf:capability:startup:1.0</capability>
+   
+... (3263 more bytes)
+================================================================================
+
+[('10.10.6.231', 56330)] Session negotiation started with hello message on session 1
+[('10.10.6.231', 56330)] Waiting for client hello (timeout 60s)...
+[('10.10.6.231', 56330)] RECV: 373 bytes
+[('10.10.6.231', 56330)] EOM message: 367 bytes
+[('10.10.6.231', 56330)] ✓ Hello received from client: 366 bytes
+[('10.10.6.231', 56330)] Client announced 3 capabilities
+[('10.10.6.231', 56330)] ✓ Changing state from: OPEN_WAIT to: ESTABLISHED - NETCONF 1.1 detected
+[('10.10.6.231', 56330)] Session NetconfServerSession{sessionId=1} established
+[('10.10.6.231', 56330)] Session established with preferences: base=1.1, capabilities=3
+[('10.10.6.231', 56330)] Remote device ready - starting message processing loop
+[('10.10.6.231', 56330)] Netconf session initiated, starting keepalives (60s interval)
+[('10.10.6.231', 56330)] RECV: 358 bytes
+[('10.10.6.231', 56330)] CHUNKED message decoded: 347 bytes
+[('10.10.6.231', 56330)] Handling incoming message #1
+[('10.10.6.231', 56330)] RPC: get (ietf-netconf-monitoring)
+[('10.10.6.231', 56330)] MONITORING: Found 1 modules, reporting ALL 1 modules
+[('10.10.6.231', 56330)] Sample modules: nos-iptables
+[('10.10.6.231', 56330)] RESPONSE: Sending chunked (1.1): 539 bytes
+[('10.10.6.231', 56330)] RESPONSE: Successfully sent message-id=m-0
+[('10.10.6.231', 56330)] RECV: 352 bytes
+[('10.10.6.231', 56330)] CHUNKED message decoded: 341 bytes
+[('10.10.6.231', 56330)] Handling incoming message #2
+[('10.10.6.231', 56330)] RPC: get-schema (identifier=nos-iptables)
+[('10.10.6.231', 56330)] Schema requested by module name: nos-iptables
+[('10.10.6.231', 56330)] ✓ Loading YANG schema for essential module: nos-iptables
+[YANG] Loading module 'nos-iptables' from /3s-com/zma/secure-framework/yang/nos-iptables.yang...
+[YANG] Successfully loaded 'nos-iptables' (3198 bytes)
+[('10.10.6.231', 56330)] RESPONSE: Sending chunked (1.1): 3421 bytes
+[('10.10.6.231', 56330)] RESPONSE: Successfully sent message-id=m-1
+[('10.10.6.231', 56330)] ✓ Schema transfer completed for module: nos-iptables
+[('10.10.6.231', 56330)] RECV: Connection closed by peer (EOF)
+[('10.10.6.231', 56330)] ✗ Connection closed by peer - exiting RPC loop
+[('10.10.6.231', 56330)] ✓ Session ended gracefully - processed 2 RPC requests
+[('10.10.6.231', 56330)] Closing socket...
+[('10.10.6.231', 56330)] Socket closed
+[Session] ('10.10.6.231', 56330) - removed
+[('10.10.6.231', 56330)] ✓ Connection closed
+
+[('10.10.6.231', 12773)] TCP connection accepted, starting TLS handshake...
+[('10.10.6.231', 12773)] ✓ TLS handshake successful
+[('10.10.6.231', 12773)] Protocol: TLSv1.3, Cipher: TLS_AES_256_GCM_SHA384
+
+================================================================================
+[CONNECTION] New NETCONF client from ('10.10.6.231', 12773)
+================================================================================
+[('10.10.6.231', 12773)] No client certificate provided
+[Auth] No client cert → default role: admin
+[Session] ('10.10.6.231', 12773) CN:N/A ONAP:admin SONiC:admin
+[('10.10.6.231', 12773)] Session context created:
+             ONAP role: admin
+             SONiC role: admin
+             Allowed: ['admin', 'operator']
+[('10.10.6.231', 12773)] Using gNMI admin connection
+[('10.10.6.231', 12773)] Starting NETCONF session...
+[('10.10.6.231', 12773)] Session NetconfServerSession{sessionId=2} starting
+[('10.10.6.231', 12773)] Starting NETCONF hello message exchange...
+[YANG] Using base capabilities only (auto-discovery disabled to avoid ONAP validation errors)
+
+================================================================================
+[('10.10.6.231', 12773)] HELLO SENT: 3763 bytes
+================================================================================
+<?xml version="1.0" encoding="UTF-8"?>
+<hello xmlns="urn:ietf:params:xml:ns:netconf:base:1.0">
+    <capabilities>
+        <capability>urn:ietf:params:netconf:base:1.0</capability>
+        <capability>urn:ietf:params:netconf:base:1.1</capability>
+        <capability>urn:ietf:params:netconf:capability:writable-running:1.0</capability>
+        <capability>urn:ietf:params:netconf:capability:candidate:1.0</capability>
+        <capability>urn:ietf:params:netconf:capability:startup:1.0</capability>
+   
+... (3263 more bytes)
+================================================================================
+
+[('10.10.6.231', 12773)] Session negotiation started with hello message on session 2
+[('10.10.6.231', 12773)] Waiting for client hello (timeout 60s)...
+[('10.10.6.231', 12773)] RECV: 373 bytes
+[('10.10.6.231', 12773)] EOM message: 367 bytes
+[('10.10.6.231', 12773)] ✓ Hello received from client: 366 bytes
+[('10.10.6.231', 12773)] Client announced 3 capabilities
+[('10.10.6.231', 12773)] ✓ Changing state from: OPEN_WAIT to: ESTABLISHED - NETCONF 1.1 detected
+[('10.10.6.231', 12773)] Session NetconfServerSession{sessionId=2} established
+[('10.10.6.231', 12773)] Session established with preferences: base=1.1, capabilities=3
+[('10.10.6.231', 12773)] Remote device ready - starting message processing loop
+[('10.10.6.231', 12773)] Netconf session initiated, starting keepalives (60s interval)
+[('10.10.6.231', 12773)] RECV: 358 bytes
+[('10.10.6.231', 12773)] CHUNKED message decoded: 347 bytes
+[('10.10.6.231', 12773)] Handling incoming message #1
+[('10.10.6.231', 12773)] RPC: get (ietf-netconf-monitoring)
+[('10.10.6.231', 12773)] MONITORING: Found 1 modules, reporting ALL 1 modules
+[('10.10.6.231', 12773)] Sample modules: nos-iptables
+[('10.10.6.231', 12773)] RESPONSE: Sending chunked (1.1): 539 bytes
+[('10.10.6.231', 12773)] RESPONSE: Successfully sent message-id=m-0
+[('10.10.6.231', 12773)] RECV: Connection closed by peer (EOF)
+[('10.10.6.231', 12773)] ✗ Connection closed by peer - exiting RPC loop
+[('10.10.6.231', 12773)] ✓ Session ended gracefully - processed 1 RPC requests
+[('10.10.6.231', 12773)] Closing socket...
+[('10.10.6.231', 12773)] Socket closed
+[Session] ('10.10.6.231', 12773) - removed
+[('10.10.6.231', 12773)] ✓ Connection closed
+
+[('10.10.6.231', 58955)] TCP connection accepted, starting TLS handshake...
+[('10.10.6.231', 58955)] ✓ TLS handshake successful
+[('10.10.6.231', 58955)] Protocol: TLSv1.3, Cipher: TLS_AES_256_GCM_SHA384
