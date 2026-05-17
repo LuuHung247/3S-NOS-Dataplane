@@ -11,7 +11,7 @@ _VALID_CHAINS = {"FORWARD", "INPUT", "OUTPUT"}
 _VALID_PROTOCOLS = {"tcp", "udp", "icmp", "sctp", "all"}
 _PORT_PROTOCOLS = {"tcp", "udp", "sctp"}
 _VALID_ACTIONS = {"DROP", "ACCEPT", "REJECT"}
-_VALID_SOURCES = {"sdnc", "ids-auto", "manual"}
+_VALID_SOURCES = {"sdnc", "agent", "manual"}
 
 
 class ValidationError(Exception):
@@ -75,7 +75,7 @@ def validate_rule(rule: dict) -> None:
         raise ValidationError(f"priority must be an integer, got {rule.get('priority')!r}")
     _require(1 <= priority <= 9999, f"priority out of range 1-9999: {priority}")
 
-    # source: enum sdnc|ids-auto|manual, default sdnc
+    # source: enum sdnc|agent|manual, default sdnc
     source = rule.get("source", "sdnc")
     _require(source in _VALID_SOURCES, f"source must be one of {_VALID_SOURCES}, got {source!r}")
 
@@ -91,9 +91,9 @@ def validate_rule(rule: dict) -> None:
         raise ValidationError(f"ttl-seconds must be an integer, got {rule.get('ttl-seconds')!r}")
     _require(0 <= ttl <= 86400, f"ttl-seconds out of range 0-86400: {ttl}")
 
-    # RBAC / AGENT constraint: ids-auto rules MUST have action=DROP
-    if source == "ids-auto":
-        _require(action == "DROP", "AGENT (ids-auto source) rules must have action=DROP")
+    # RBAC / AGENT constraint: agent rules MUST have action=DROP
+    if source == "agent":
+        _require(action == "DROP", "AGENT (agent source) rules must have action=DROP")
 
 
 def enforce_rbac(rule: dict, role: str) -> None:
@@ -101,7 +101,7 @@ def enforce_rbac(rule: dict, role: str) -> None:
 
     ADMIN (internal/sdnc cert OU): no restrictions.
     OPERATOR (aws cert OU): may only push source=sdnc rules.
-    AGENT (auto cert OU): may only push source=ids-auto rules (action=DROP enforced by validate_rule).
+    AGENT (auto cert OU): may only push source=agent rules (action=DROP enforced by validate_rule).
     """
     source = rule.get("source", "sdnc")
     if role == "ADMIN":
@@ -109,6 +109,6 @@ def enforce_rbac(rule: dict, role: str) -> None:
     if role == "OPERATOR":
         _require(source == "sdnc", f"OPERATOR role may only push source=sdnc, got {source!r}")
     elif role == "AGENT":
-        _require(source == "ids-auto", f"AGENT role may only push source=ids-auto, got {source!r}")
+        _require(source == "agent", f"AGENT role may only push source=agent, got {source!r}")
     else:
         raise ValidationError(f"Unknown role {role!r} — access denied")

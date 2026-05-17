@@ -35,6 +35,7 @@ from generated import gnmi_pb2, gnmi_pb2_grpc
 
 from iptables import apply_rule, remove_rule
 from recovery import reconcile_on_startup
+from iptables import ensure_base_rules
 from validators import ValidationError, enforce_rbac, validate_rule
 
 # ---------------------------------------------------------------------------
@@ -349,6 +350,8 @@ def main() -> None:
         log.error("Cannot connect to Redis: %s", e)
         sys.exit(1)
 
+    log.info("Ensuring base iptables rules...")
+    ensure_base_rules()
     log.info("Running startup reconcile...")
     reconcile_on_startup(configdb)
 

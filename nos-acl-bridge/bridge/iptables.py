@@ -85,6 +85,39 @@ def remove_rule(rule_id: str, chain: str = "FORWARD") -> None:
             log.error("iptables delete failed: %s", e)
 
 
+def ensure_base_rules(chain: str = "FORWARD") -> None:
+    """Ensure infrastructure base rules exist in chain.
+
+    ESTABLISHED,RELATED must always be present so reply traffic for
+    any SF-authorized flow works correctly. This is enforcement-layer
+    infrastructure, not a policy rule — not stored in ConfigDB or YANG.
+
+    Idempotent: checks before inserting, safe to call on every startup.
+    """
+    try:
+        out = subprocess.check_output(
+            ["iptables", "-L", chain, "-n"], text=True
+        )
+    except subprocess.CalledProcessError as e:
+        log.error("iptables list failed in ensure_base_rules: %s", e)
+        return
+
+    if "ctstate RELATED,ESTABLISHED" in out or "state RELATED,ESTABLISHED" in out:
+        log.info("Base rule ESTABLISHED,RELATED already present in %s", chain)
+        return
+
+    cmd = [
+        "iptables", "-A", chain,
+        "-m", "conntrack", "--ctstate", "ESTABLISHED,RELATED",
+        "-j", "ACCEPT",
+    ]
+    try:
+        subprocess.run(cmd, check=True)
+        log.info("Base rule ESTABLISHED,RELATED inserted into %s", chain)
+    except subprocess.CalledProcessError as e:
+        log.error("Failed to insert ESTABLISHED,RELATED base rule: %s", e)
+
+
 def list_nos_rules() -> dict[str, str]:
     """Return {rule-id: chain} for all iptables rules tagged with 'nos:'."""
     result: dict[str, str] = {}
