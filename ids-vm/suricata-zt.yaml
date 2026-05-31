@@ -2,7 +2,8 @@
 ---
 vars:
   address-groups:
-    HOME_NET: "[10.1.0.0/16,10.2.0.0/16]"
+    # V2: 8-zone fabric, includes new 10.3/16 (APP-GW + DB-ANALYTICS) + 10.4/16 (WORKER + MONITORING)
+    HOME_NET: "[10.1.0.0/16,10.2.0.0/16,10.3.0.0/16,10.4.0.0/16]"
     EXTERNAL_NET: "!$HOME_NET"
   port-groups:
     HTTP_PORTS: "80"
@@ -17,12 +18,21 @@ vars:
     VXLAN_PORTS: 4789
     TEREDO_PORTS: 3544
 af-packet:
+  # V2 4-leaf passive mirror: 1 capture NIC per leaf, each in own cluster
+  - interface: eth0
+    cluster-id: 98
+    cluster-type: cluster_flow
+    defrag: yes
   - interface: eth1
     cluster-id: 99
     cluster-type: cluster_flow
     defrag: yes
-  - interface: eth0
-    cluster-id: 98
+  - interface: eth3
+    cluster-id: 100
+    cluster-type: cluster_flow
+    defrag: yes
+  - interface: eth4
+    cluster-id: 101
     cluster-type: cluster_flow
     defrag: yes
 default-log-dir: /var/log/suricata/

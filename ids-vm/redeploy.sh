@@ -5,9 +5,12 @@
 set -e
 cd "$(dirname "$0")"
 
-echo "=== [1/5] network up (eth0/eth1 promisc, eth2+DHCP) ==="
-ip link set eth0 up 2>/dev/null && ip link set eth0 promisc on 2>/dev/null || true
-ip link set eth1 up 2>/dev/null && ip link set eth1 promisc on 2>/dev/null || true
+echo "=== [1/5] network up (V2: 4 capture NICs + 1 mgmt) ==="
+# V2 capture NICs: eth0=LEAF-1, eth1=LEAF-2, eth3=LEAF-3, eth4=LEAF-4 (promisc, no IP)
+for nic in eth0 eth1 eth3 eth4; do
+    ip link set $nic up 2>/dev/null && ip link set $nic promisc on 2>/dev/null || true
+done
+# mgmt = eth2 (libvirt NAT, gets 192.168.122.205 via DHCP)
 ip link set eth2 up 2>/dev/null || true
 udhcpc -i eth2 -t 8 -q 2>/dev/null || true
 # Ensure mgmt IP 192.168.122.205 (libvirt DNAT host→guest relies on this exact IP)
