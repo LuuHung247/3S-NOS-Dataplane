@@ -64,15 +64,8 @@ def gen_bootstrap(hostname, zone, ip, gateway, svc_port, svc_kind):
         "https://dl-cdn.alpinelinux.org/alpine/v3.23/main",
         "https://dl-cdn.alpinelinux.org/alpine/v3.23/community",
         "EOF",
-        "apk update >/dev/null 2>&1",
-        "apk add --no-cache openssh socat busybox-extras curl >/dev/null 2>&1",
-        "",
-        "# 3) sshd (root, no password)",
-        "echo 'PermitRootLogin yes'      >> /etc/ssh/sshd_config",
-        "echo 'PermitEmptyPasswords yes' >> /etc/ssh/sshd_config",
-        "passwd -d root >/dev/null 2>&1 || true",
-        "ssh-keygen -A 2>/dev/null",
-        "/usr/sbin/sshd",
+        "apk update 2>&1 | tail -1",
+        "apk add --no-cache socat busybox-extras 2>&1 | tail -1",
     ]
     # 4) per-zone service
     if svc_kind == "banner" and svc_port > 0:
